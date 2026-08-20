@@ -59,3 +59,9 @@ def stats():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001)
+
+@app.route("/tasks/<int:task_id>", methods=["DELETE"])
+def delete_task(task_id):
+    global tasks
+    tasks = [t for t in tasks if t.id != task_id]
+    return jsonify({"message": f"Task {task_id} deleted"})
