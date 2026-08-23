@@ -1,6 +1,13 @@
+import os
+from dotenv import load_dotenv
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
+
+load_dotenv()
+
+SECRET_KEY = os.environ.get("SECRET_KEY","default-fallback-key")
+PORT = int(os.environ.get("PORT","5001"))
 
 class Task:
     def __init__(self, id, name, done=False):
@@ -58,7 +65,8 @@ def stats():
     return jsonify({"total_tasks": total, "completed": completed})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001)
+    print(f"Starting app with SECRET_KEY={'*' * len(SECRET_KEY)} on port {PORT}")
+    app.run(host="0.0.0.0", port=PORT)
 
 @app.route("/tasks/<int:task_id>", methods=["DELETE"])
 def delete_task(task_id):
